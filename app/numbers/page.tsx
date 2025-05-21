@@ -8,6 +8,7 @@ export default function Numbers() {
   const [numbers, setNumbers] = useState<Number[]>([])
 
   useEffect(() => {
+    console.log('effect')
     const fetchNumbers = async () => {
       const res = await fetch('/api/numbers');
       const data = await res.json();
@@ -33,12 +34,9 @@ export default function Numbers() {
 
   return (
     <>
-    <input type="number" value={value}
-        onChange={handleChange}
-        placeholder="Enter non-zero integer"
-      />
-      <button onClick={handleBtnClick}>add</button>
-      <table border={1} cellSpacing="0" cellPadding="5" style={{ borderCollapse: "collapse", width: "100%" }}>
+    <input type="number" value={value} onChange={handleChange} placeholder="Enter non-zero integer"/>
+    <button onClick={handleBtnClick}>add</button>
+    <table border={1} cellSpacing="0" cellPadding="5" style={{ borderCollapse: "collapse", width: "100%" }}>
       <thead>
         <tr>
           <th>ID 1</th>
