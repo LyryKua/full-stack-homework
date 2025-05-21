@@ -1,23 +1,25 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export type Number = {
+export type Grade = {
     id: number;
+    subject: 'Math' | 'Science' | 'History';
     value: number;
 }
 
+// mark: Currently not in use. Created for debugging purposes.
 export const GET = async () => {
     try {
-        const numbers = await prisma.$queryRaw<Number[]>`SELECT * FROM "Number"`
+        const grades = await prisma.$queryRaw<Grade[]>`SELECT * FROM "Grade"`
 
         return new NextResponse(
-            JSON.stringify(numbers),
+            JSON.stringify(grades),
             { status: 200 }
         );
     } catch (error) {
         return new NextResponse(
             JSON.stringify({
-                message: 'Reading from "Number" failed',
+                message: 'Reading from "Grade" failed',
                 error,
             }),
             { status: 500 }
@@ -27,17 +29,17 @@ export const GET = async () => {
 
 export const POST = async (request: Request) => {
     try {
-        const { value } = await request.json();
-        const createdNumbers = await prisma.$queryRaw<Number[]>`INSERT INTO "Number" (value) VALUES (${value}) RETURNING *`;
+        const { value, subject } = await request.json();
+        const createdGrades = await prisma.$queryRaw<Grade[]>`INSERT INTO "Grade" (value, class) VALUES (${value}, ${subject}::text::"Class") RETURNING *`;
 
         return new NextResponse(
-            JSON.stringify(createdNumbers),
+            JSON.stringify(createdGrades),
             { status: 201 }
         );
     } catch (error) {
         return new NextResponse(
             JSON.stringify({
-                message: 'Inserting to "Nubmer" table failed',
+                message: 'Inserting to "Grade" table failed',
                 error,
             }),
             { status: 500 }
